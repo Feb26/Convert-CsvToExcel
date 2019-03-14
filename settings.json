@@ -1,0 +1,7 @@
+{
+	"extension": "*",
+	"delimiter": ",",
+	"adjustColumnWidth": true,
+	"inputDir": ".\\input",
+	"outputDir": ".\\output"
+}
