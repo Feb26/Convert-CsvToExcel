@@ -1,5 +1,7 @@
 ﻿Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+$WarningPreference = "Continue"
+$VerbosePreference = "Continue"
 $projectRoot = Split-Path $PSScriptRoot -parent
 Set-Location $projectRoot
 
@@ -18,9 +20,15 @@ $settings = Get-Content -Path ".\settings.json" -Raw -Encoding Default | Convert
 ###########
 function convertCsvFile([string] $inputCsv) {
     $inputCsvFileName = [System.IO.Path]::GetFileName($inputCsv)
-    $relativePath = Join-Path $settings.outputDir "$inputCsvFileName.xlsx"
+    $relativePath = Join-Path $settings.path.outputDir "$inputCsvFileName.xlsx"
     $outputXlsx = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($relativePath)
-    ConvertCsvToExcel -inputCsv $inputCsv -outputXlsx $outputXlsx -delimiter $settings.delimiter -adjustColumnWidth $settings.adjustColumnWidth
+    
+    ConvertCsvToExcel -inputCsv $inputCsv `
+            -outputXlsx $outputXlsx `
+            -delimiter $settings.inputFile.delimiter `
+            -textQualifier $settings.inputFile.textQualifier `
+            -font $settings.outputFile.font `
+            -adjustColumnWidth $settings.outputFile.adjustColumnWidth
 }
 
 #######
@@ -34,7 +42,7 @@ foreach ($inputFile in $inpuFileList) {
         convertCsvFile $inputFile
     } elseif (Test-Path -Path $inputFile -PathType Container) {
         # ディレクトリの場合はファイルを選択してから変換
-        $inputCsvList = Get-ChildItem -Path $inputFile -File -Recurse -Filter "*.$($settings.extension)" |
+        $inputCsvList = Get-ChildItem -Path $inputFile -File -Recurse -Filter "*.$($settings.inputFile.extension)" |
             Select-Object -Property Directory, Name, Length, LastWriteTime |
             Out-GridView -PassThru -Title "Excelに変換するファイルを選択してください" |
             ForEach-Object { Join-Path $_.Directory $_.Name }

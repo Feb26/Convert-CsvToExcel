@@ -5,7 +5,7 @@ cd /d "%~dp0"
 rem "引数の有無によって処理を切り分け"
 if "%~1"=="" (
 	rem "引数無しの場合はinputディレクトリの中を変換"
-	powershell -NoProfile -ExecutionPolicy Unrestricted -File .\src\Convert-AllCsvInInputDir2Excel.ps1
+	powershell -NoProfile -ExecutionPolicy Unrestricted -File .\src\Convert-AllCsvInInputDir2Excel.ps1 >> log.txt 2>&1
 	exit /b
 )
 
@@ -15,5 +15,5 @@ set ARGS=
 set ARGS=!ARGS! "%~1"
 shift
 if not "%~1"=="" goto LOOP
-powershell -NoProfile -ExecutionPolicy Unrestricted -File .\src\Convert-AllCsvOfArgs2Excel.ps1 %ARGS%
+powershell -NoProfile -ExecutionPolicy Unrestricted -File .\src\Convert-AllCsvOfArgs2Excel.ps1 %ARGS% >> log.txt 2>&1
 exit /b

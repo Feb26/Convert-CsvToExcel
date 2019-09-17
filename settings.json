@@ -1,7 +1,17 @@
 {
-	"extension": "*",
-	"delimiter": ",",
-	"adjustColumnWidth": true,
-	"inputDir": ".\\input",
-	"outputDir": ".\\output"
+	"inputFile": {
+		"extension": "*",
+		"delimiter": ",",
+		"textQualifier": "\""
+	},
+
+	"outputFile": {
+		"font": "‚l‚r ‚oƒSƒVƒbƒN",
+		"adjustColumnWidth": true
+	},
+
+	"path": {
+		"inputDir": ".\\input",
+		"outputDir": ".\\output"
+	}
 }

@@ -295,7 +295,7 @@ Begin {
 						$script:automatons.AddRange(@($_))
 						$script:inputCount = $MaxInputCount
 					} elseif ($_.IsFailed()) {
-						Write-Verbose ("{0} : {1} 除外" -f $script:inputCount, $_.Name)
+						Write-Debug ("{0} : {1} 除外" -f $script:inputCount, $_.Name)
 						$script:automatons.Remove($_)
 					}
 				}
@@ -316,7 +316,7 @@ Process {
 	Write-Debug "Process"
 	switch ($pscmdlet.ParameterSetName) {
 		'InputObject' {
-			Write-Verbose 'Data を処理しています。'
+			Write-Debug 'Data を処理しています。'
 			if ($initialized -ne $true) {
 				initialize
 				$initialized = $true
@@ -326,9 +326,9 @@ Process {
 			}
 		}
 		'Path' {
-			Write-Verbose 'Path を処理しています。'
+			Write-Debug 'Path を処理しています。'
 			Get-Item $Path | Foreach-Object {
-				Write-Verbose $_
+				Write-Debug $_
 				initialize
 				Get-Content $_ -Encoding Byte -TotalCount $MaxInputCount | Foreach-Object {
 					[void](work ([Byte]$_))
@@ -337,9 +337,9 @@ Process {
 			}
 		}
 		'LiteralPath' {
-			Write-Verbose 'LiteralPath を処理しています。'
+			Write-Debug 'LiteralPath を処理しています。'
 			Get-Item -LiteralPath $LiteralPath | Foreach-Object {
-				Write-Verbose $_
+				Write-Debug $_
 				initialize
 				Get-Content -LiteralPath $_ -Encoding Byte -TotalCount $MaxInputCount | Foreach-Object {
 					[void](work ([Byte]$_))
